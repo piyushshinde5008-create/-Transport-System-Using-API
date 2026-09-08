@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Public Transport Information System</title>
+
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+}
+
+body {
+    background: #f2f6fa;
+    color: #222;
+}
+
+/* Header */
+header {
+    background: linear-gradient(135deg, #0066cc, #00a8ff);
+    color: white;
+    padding: 22px;
+    text-align: center;
+}
+
+header h1 {
+    font-size: 28px;
+}
+
+header p {
+    margin-top: 7px;
+    font-size: 15px;
+}
+
+/* Main Container */
+.container {
+    width: 92%;
+    max-width: 1100px;
+    margin: 25px auto;
+}
+
+/* Search Box */
+.search-box {
+    background: white;
+    padding: 25px;
+    border-radius: 15px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+}
+
+.search-box h2 {
+    margin-bottom: 20px;
+    color: #0066cc;
+}
+
+.form {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 15px;
+}
+
+input, select {
+    padding: 13px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-size: 14px;
+    outline: none;
+}
+
+input:focus, select:focus {
+    border-color: #0066cc;
+}
+
+button {
+    padding: 13px;
+    border: none;
+    border-radius: 8px;
+    background: #0066cc;
+    color: white;
+    font-size: 15px;
+    cursor: pointer;
+}
+
+button:hover {
+    background: #004c99;
+}
+
+/* Result */
+#result {
+    margin-top: 25px;
+}
+
+.card {
+    background: white;
+    padding: 20px;
+    margin-bottom: 15px;
+    border-radius: 12px;
+    box-shadow: 0 3px 12px rgba(0,0,0,0.08);
+}
+
+.card h3 {
+    color: #0066cc;
+    margin-bottom: 10px;
+}
+
+.info {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px;
+    margin-top: 10px;
+}
+
+.info span {
+    background: #eef6ff;
+    padding: 9px;
+    border-radius: 6px;
+}
+
+.loading {
+    text-align: center;
+    padding: 20px;
+    color: #0066cc;
+}
+
+.error {
+    color: red;
+    text-align: center;
+    padding: 15px;
+}
+
+/* Footer */
+footer {
+    margin-top: 35px;
+    background: #123;
+    color: white;
+    text-align: center;
+    padding: 18px;
+    font-size: 14px;
+}
+
+/* Mobile */
+@media(max-width: 800px) {
+    .form {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+@media(max-width: 500px) {
+    .form {
+        grid-template-columns: 1fr;
+    }
+
+    .info {
+        grid-template-columns: 1fr;
+    }
+
+    header h1 {
+        font-size: 22px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <h1>🚌 Public Transport Information System</h1>
+    <p>Find Bus & Train Information Using API</p>
+</header>
+
+<div class="container">
+
+    <div class="search-box">
+        <h2>🔎 Search Transport</h2>
+
+        <div class="form">
+
+            <input type="text"
+                   id="source"
+                   placeholder="Enter Source">
+
+            <input type="text"
+                   id="destination"
+                   placeholder="Enter Destination">
+
+            <select id="transport">
+                <option value="all">All Transport</option>
+                <option value="bus">Bus</option>
+                <option value="train">Train</option>
+            </select>
+
+            <button onclick="searchTransport()">
+                Search
+            </button>
+
+        </div>
+    </div>
+
+    <div id="result"></div>
+
+</div>
+
+<footer>
+    <p>Public Transport Information System Using API</p>
+    <p>Developed using HTML5 • CSS3 • JavaScript • REST API / JSON</p>
+</footer>
+
+
+<script>
+
+/*
+ IMPORTANT:
+ Replace this URL with the Public Transport API
+ selected for your project.
+
+ Example:
+ const API_URL = "YOUR_PUBLIC_TRANSPORT_API_URL";
+*/
+
+const API_URL = "YOUR_PUBLIC_TRANSPORT_API_URL";
+
+
+async function searchTransport() {
+
+    const source = document.getElementById("source").value.trim();
+    const destination = document.getElementById("destination").value.trim();
+    const transport = document.getElementById("transport").value;
+
+    const result = document.getElementById("result");
+
+    if (source === "" || destination === "") {
+        result.innerHTML =
+            `<div class="error">
+                ⚠️ Please enter Source and Destination.
+             </div>`;
+        return;
+    }
+
+    result.innerHTML =
+        `<div class="loading">
+            ⏳ Searching transport information...
+         </div>`;
+
+    /*
+       API CALL
+
+       The exact URL and JSON fields depend on the
+       Public Transport API selected for the project.
+    */
+
+    try {
+
+        // Demo data for testing the webpage
+        // Replace this section with fetch(API_URL)
+        // after selecting your actual API.
+
+        const demoData = [
+            {
+                type: "Bus",
+                number: "BUS-101",
+                name: "City Express",
+                route: source + " → " + destination,
+                timing: "08:30 AM",
+                stops: "5 Stops",
+                fare: "₹30"
+            },
+            {
+                type: "Train",
+                number: "TR-205",
+                name: "Passenger Express",
+                route: source + " → " + destination,
+                timing: "10:15 AM",
+                stops: "8 Stops",
+                fare: "₹45"
+            }
+        ];
+
+        let data = demoData;
+
+        if (transport !== "all") {
+            data = data.filter(item =>
+                item.type.toLowerCase() === transport
+            );
+        }
+
+        displayResults(data);
+
+    } catch (error) {
+
+        result.innerHTML =
+            `<div class="error">
+                ❌ Unable to get transport information.
+             </div>`;
+
+        console.log(error);
+    }
+}
+
+
+/* Display Results */
+
+function displayResults(data) {
+
+    const result = document.getElementById("result");
+
+    if (data.length === 0) {
+
+        result.innerHTML =
+            `<div class="error">
+                No transport found for this route.
+             </div>`;
+
+        return;
+    }
+
+    result.innerHTML = "";
+
+    data.forEach(item => {
+
+        result.innerHTML += `
+
+        <div class="card">
+
+            <h3>
+                ${item.type === "Bus" ? "🚌" : "🚆"}
+                ${item.name}
+            </h3>
+
+            <div class="info">
+
+                <span>
+                    <b>Transport No:</b>
+                    ${item.number}
+                </span>
+
+                <span>
+                    <b>Type:</b>
+                    ${item.type}
+                </span>
+
+                <span>
+                    <b>Route:</b>
+                    ${item.route}
+                </span>
+
+                <span>
+                    <b>Timing:</b>
+                    ${item.timing}
+                </span>
+
+                <span>
+                    <b>Stops:</b>
+                    ${item.stops}
+                </span>
+
+                <span>
+                    <b>Fare:</b>
+                    ${item.fare}
+                </span>
+
+            </div>
+
+        </div>
+
+        `;
+    });
+}
+
+</script>
+
+</body>
+</html>
